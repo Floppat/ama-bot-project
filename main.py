@@ -6,7 +6,7 @@ from discord.ext import commands
 from mini_game      import *
 from global_warming import *
 
-bot = commands.Bot(command_prefix={'/','!',"-"}, intents = discord.Intents.all())
+bot = commands.Bot(command_prefix={'/','!'}, intents = discord.Intents.all())
 
 # event function----------------------------------------------------------------------------
 @bot.event
