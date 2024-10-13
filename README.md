@@ -1,7 +1,7 @@
 ***
 #  **ama bot**
 ***
-Hi *there! this repository is about my discord bot!*
+*Hi there! this repository is about my discord bot!*
 ***
 ##  What bot can do?
 ***
@@ -20,3 +20,4 @@ to defeat your opponents!
 ## general info
 ***
 * use the '/cmd' command to find out about all the commands that are needed to interact with ama bot
+* to run don't needed nothng special, only discord library
