@@ -21,3 +21,5 @@ to defeat your opponents!
 ***
 * use the '/cmd' command to find out about all the commands that are needed to interact with ama bot
 * to run don't needed nothng special, only discord library
+* this is my graduation project, so this is where most of my skills are gathered
+* creator on GitHub: Floppat
