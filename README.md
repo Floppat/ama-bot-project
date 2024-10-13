@@ -1,10 +1,8 @@
 ***
 #  **ama bot**
-***
 *Hi there! this repository is about my discord bot!*
 ***
 ##  What bot can do?
-***
 ###  Global warming
 * tell you about global warming troubles - why this is bad?
 * reasons of global warming - why it exists and only gets worse?
