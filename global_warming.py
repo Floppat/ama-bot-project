@@ -2,6 +2,11 @@
 import discord
 from discord.ext import commands
 
+# file-imports------------------------------------------------------------------------------
+from buttons import bq1
+from embeds import eq1
+from mini_game import get_user
+
 # functions---------------------------------------------------------------------------------
 async def global_warming_cmd(interaction: discord.Interaction) -> None:
     message = ('попробуйте  -about      (узнайте что такое глобальное потепление, на что оно влияет, и почему это опасно)\n'
@@ -35,7 +40,13 @@ async def global_warming_reasons(ctx: commands.Context) -> None:
 async def global_warming_how_help(ctx: commands.Context) -> None:
     await ctx.send('сейчас в магазинах можно найти товары на которых написано -"изготовлено с использованием 100% возобновляемой/эко енергии".\n'
                    'покупка преимущевственно таких товаров может помочь сделать свой вклад в замедление роста глобльного потепления,\n'
-                   'но поскольку рост глобального потепления в основном происходит из за крупных производств, простые люди мало что могут сделать')
+                   'но поскольку рост глобального потепления в основном происходит из за крупных производств, простые люди мало что могут сделать\n'
+                   'единственное значимое для климата действие - перейти на электрическую машину или вовсе пользоваться лишь общевственным транспортом')
 
-async def global_warming_quiz(ctx: commands.Context) -> None:
-    await ctx.send(' тут нужно сделать квиз с кнопками')
+
+async def global_warming_quiz(interaction: discord.Interaction):
+    user = await get_user(user_id=interaction.user.id)
+    if not user:
+        await interaction.response.send_message('Вы не зарегистрированы, поэтому не можете использовать эту команду.')
+        return
+    await interaction.response.send_message(embed=eq1, view=bq1(user=user))
