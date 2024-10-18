@@ -21,7 +21,7 @@ class Pet:
         self.shop_cost = shop_cost
 
     def __repr__(self) -> str:
-        return (f'<Здоровье питомца: {self.health}/{self.max_health}, '
+        return (f' <Здоровье питомца: {self.health}/{self.max_health}, '
                 f'выносливость: {self.stamina}/{self.max_stamina}, сила: {self.damage}, защита: {self.defense}>')
     
     def __bool__(self) -> bool:
@@ -58,7 +58,7 @@ class Enemy:
     def __init__(self, target_pet):
         self.damage = random.randint(target_pet.minlvl, target_pet.maxlvl)
         self.health = random.randint(50, 100)
-        self.defense = random.randint(target_pet.floor, target_pet. minlvl)
+        self.defense = random.randint(target_pet.floor, target_pet.minlvl)
 
     def __repr__(self) -> str:
         return (f'<Здоровье врага {self.health}, '
