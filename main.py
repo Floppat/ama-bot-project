@@ -5,8 +5,10 @@ from discord.ext import commands
 # file-imports------------------------------------------------------------------------------
 from mini_game      import *
 from global_warming import *
+from embeds import bcmd
 
-bot = commands.Bot(command_prefix={'/','!'}, intents = discord.Intents.all())
+# bot settings------------------------------------------------------------------------------
+bot = commands.Bot(command_prefix='!', intents = discord.Intents.all())
 
 # event function----------------------------------------------------------------------------
 @bot.event
@@ -16,20 +18,14 @@ async def on_ready():
     print(f'{len(synced)} / команды доступны.')
 
 # basic commands----------------------------------------------------------------------------
-@bot.tree.command(name='cmd', description='"?" чтобы узнать возможные типы  "cmd"')
-async def cmd(interaction: discord.Interaction, type:str) -> None:
-    if type == "?":
-        message =('/cmd 1   (мини-игра)\n'
-                  '/cmd 2   (проект о всемирном потеплении)')
-        await interaction.response.send_message(message)
-    elif type == "1":
-        await mini_game_cmd(interaction)
-    elif type == "2":
-        await global_warming_cmd(interaction)
-    else:
-        await interaction.response.send_message('вы указали неправельный тип')
+@bot.tree.command(name='cmd', description='все команды бота')
+async def cmd(interaction: discord.Interaction) -> None:
+        await interaction.response.send_message(embed=bcmd)
 
 # mini-game commands------------------------------------------------------------------------
+@bot.command('cmd_game')
+async def cmd_game(ctx: commands.Context):
+    await mini_game_cmd(ctx)
 @bot.tree.command(name='prehistory', description='ура сюжет')
 async def prehistory(interaction: discord.Interaction) -> None:
     await mini_game_prehistory(interaction)
@@ -67,6 +63,9 @@ async def goofyahh(interaction: discord.Interaction) -> None:
     await mini_game_goofyahh(interaction)
 
 # global warming commands-------------------------------------------------------------------
+@bot.command('cmd_warming')
+async def cmd_warming(ctx: commands.Context) -> None:
+    await global_warming_cmd(ctx)
 @bot.command('about')
 async def about(ctx: commands.Context) -> None:
     await global_warming_about(ctx)
@@ -79,11 +78,10 @@ async def reasons(ctx: commands.Context) -> None:
 async def how_help(ctx: commands.Context) -> None:
     await global_warming_how_help(ctx)
 
-@bot.command('quiz')
-async def quiz(ctx: commands.Context) -> None:
+@bot.tree.command(name='quiz', description='небольшая викторина о глобальном потеплении')
+async def quiz(ctx: commands.Context):
     await global_warming_quiz(ctx)
+
 
 # bot run-----------------------------------------------------------------------------------
 bot.run('')
-
-    
