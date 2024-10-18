@@ -7,7 +7,8 @@ class User:
         self.nickname = user_nickname
         self.coins = 0
         self.pet = Pet()
-
+        self.right_answers=0
+        self.history_max = 0
     def __repr__(self):
         return (f'--- Информация об игроке {self.nickname} ---\n'
                 f'    | ID: {self.user_id}\n'
@@ -31,17 +32,18 @@ class User:
         return
 
     async def attack(self, interaction: Interaction):
-        if not self.pet.can_train():
+        if not self.pet.can_attack():
             await interaction.response.send_message('сперва вашему питомцу следует восстановить силы')
             return
         enemy = Enemy(target_pet=self.pet)
+        now_enemy=deepcopy(enemy)
         self.pet.stamina -= 60
         while True:
             enemy.attack(target_pet=self.pet)
             self.pet.attack(target_pet=enemy)
 
             if not self.pet:
-                await interaction.response.send_message(f'вы проиграли!, ваш враг был:{enemy}\n'
+                await interaction.response.send_message(f'вы проиграли!, ваш враг был:{now_enemy}\n'
                                                         f'ваши характеристики:{self.pet}')
                 return
 
@@ -50,7 +52,7 @@ class User:
                 self.pet.minlvl += 2
                 self.pet.maxlvl += 2
                 self.pet.floor += 1
-                await interaction.response.send_message(f'вы выиграли. противник стал посильнее. ваш враг был:{enemy}\n'
+                await interaction.response.send_message(f'вы выиграли. противник стал сильнее. ваш враг был:{now_enemy}\n'
                                 'вы заработали 100 монет\n'
                                 f'итого монет: {self.coins}\n'
                                 f'ваши характеристики:{self.pet}')
@@ -78,9 +80,27 @@ class User:
             return
 
         if self.coins < shop_pets[item].shop_cost:
-            await interaction.response.send_message(f'Недостаточно денег: чтобы купить этот артефакт, нужно {shop_pets[item].shop_cost} денег')
+            await interaction.response.send_message(f'Недостаточно монет: чтобы купить этот артефакт, нужно {shop_pets[item].shop_cost} монет')
             return
 
         self.coins -= shop_pets[item].shop_cost
         self.pet = deepcopy(shop_pets[item])
         await interaction.response.send_message(f'Ваш пет надел артефакт: {self.pet}')
+
+    async def right_answer(self):
+        self.right_answers+=1
+    async def quizresult(self, interaction: Interaction, cancel):
+        if not cancel:
+            if self.right_answers == 5:
+                job = ', хорошая работа!'
+            elif self.right_answers >= 0 and self.right_answers <= 2:
+                job = ', попробуйте почитать о глобальном потеплении ещё раз!'
+            elif self.right_answers >= 3 and self.right_answers <= 4:
+                job = ', неплохой результат, повторите теорию и попробуй ещё раз!'
+            if self.right_answers > self.history_max:
+                self.history_max = self.right_answers
+            await interaction.response.edit_message(content=f'Вы набрали {self.right_answers}/5 очков{job}\n'
+                                                            f'рекорд:{self.history_max}/5 очков.', embed=None, view=None)
+        elif cancel is True:
+            await interaction.response.edit_message(content='Отменено', embed=None, view=None)
+        self.right_answers = 0
