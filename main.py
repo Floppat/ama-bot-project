@@ -6,6 +6,7 @@ from discord.ext import commands
 from mini_game      import *
 from global_warming import *
 from embeds import bcmd
+from functional import change
 
 # bot settings------------------------------------------------------------------------------
 bot = commands.Bot(command_prefix='!', intents = discord.Intents.all())
@@ -20,7 +21,11 @@ async def on_ready():
 # basic commands----------------------------------------------------------------------------
 @bot.tree.command(name='cmd', description='все команды бота')
 async def cmd(interaction: discord.Interaction) -> None:
-        await interaction.response.send_message(embed=bcmd)
+    await interaction.response.send_message(embed=bcmd)
+
+@bot.tree.command(name= 'change_nick', description='изменить ник отображаемый в лидербордах')
+async def nick_change(interaction: discord.Interaction, new_nick: str)-> None:
+    await change(interaction=interaction, new_nick=new_nick)
 
 # mini-game commands------------------------------------------------------------------------
 @bot.command('cmd_game')
@@ -54,12 +59,12 @@ async def sleep(interaction: discord.Interaction) -> None:
 @bot.tree.command(name='shop', description='Напишите ? или help если не знаете ассортимент')
 async def shop(interaction: discord.Interaction, item: str) -> None:
     await mini_game_shop(interaction=interaction, item=item)
-    
+
 # global warming commands-------------------------------------------------------------------
 @bot.command('cmd_warming')
 async def cmd_warming(ctx: commands.Context) -> None:
     await global_warming_cmd(ctx=ctx)
-    
+
 @bot.command('about')
 async def about(ctx: commands.Context) -> None:
     await global_warming_about(ctx=ctx)
