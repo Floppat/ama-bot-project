@@ -59,6 +59,7 @@ async def shop(interaction: discord.Interaction, item: str) -> None:
 @bot.command('cmd_warming')
 async def cmd_warming(ctx: commands.Context) -> None:
     await global_warming_cmd(ctx=ctx)
+    
 @bot.command('about')
 async def about(ctx: commands.Context) -> None:
     await global_warming_about(ctx=ctx)
