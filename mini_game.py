@@ -3,16 +3,7 @@ import discord
 from discord.ext import commands
 
 # file-imports------------------------------------------------------------------------------
-from users import User
-
-# pre-functions-----------------------------------------------------------------------------
-users_database = list()
-
-async def get_user(user_id: int) -> User | None:
-    for user in users_database:
-        if user_id == user.user_id:
-            return user
-    return None
+from functional import register, get_user
 
 # functions---------------------------------------------------------------------------------
 async def mini_game_cmd(ctx: commands.Context) -> None:
@@ -44,54 +35,37 @@ async def mini_game_guide(interaction: discord.Interaction) -> None:
                 'также противник становится сильнее не по дням, а по боям, так что покупайте артефакты, ведь они повышают защиту\n')
     await interaction.response.send_message(message)
 
-async def mini_game_register(interaction: discord.Interaction, nickname: str):
-    if await get_user(user_id=interaction.user.id):
-        await interaction.response.send_message('Вы уже зарегистрированы')
-        return
-    users_database.append(
-        User(user_id=interaction.user.id, user_nickname=nickname)
-    )
-    await interaction.response.send_message('Регистрация прошла успешно')
-
 async def mini_game_train(interaction: discord.Interaction):
     user = await get_user(user_id=interaction.user.id)
     if not user:
-        await interaction.response.send_message('Вы не зарегистрированы, поэтому не можете использовать эту команду.')
-        return
+        await register(interaction = interaction)
+        user = await get_user(user_id=interaction.user.id)
     await user.train(interaction=interaction)
 
 async def mini_game_feed(interaction: discord.Interaction):
     user = await get_user(user_id=interaction.user.id)
     if not user:
-        await interaction.response.send_message('Вы не зарегистрированы, поэтому не можете использовать эту команду.')
-        return
+        await register(interaction = interaction)
+        user = await get_user(user_id=interaction.user.id)
     await user.feed(interaction=interaction)
 
 async def mini_game_attack(interaction: discord.Interaction):
     user = await get_user(user_id=interaction.user.id)
     if not user:
-        await interaction.response.send_message('Вы не зарегистрированы, поэтому не можете использовать эту команду.')
-        return
+        await register(interaction = interaction)
+        user = await get_user(user_id=interaction.user.id)
     await user.attack(interaction=interaction)
 
 async def mini_game_sleep(interaction: discord.Interaction):
     user = await get_user(user_id=interaction.user.id)
     if not user:
-        await interaction.response.send_message('Вы не зарегистрированы, поэтому не можете использовать эту команду.')
-        return
+        await register(interaction = interaction)
+        user = await get_user(user_id=interaction.user.id)
     await user.sleep(interaction=interaction)
 
 async def mini_game_shop(interaction: discord.Interaction, item: str):
     user = await get_user(user_id=interaction.user.id)
     if not user:
-        await interaction.response.send_message('Вы не зарегистрированы, поэтому не можете использовать эту команду.')
-        return
+        await register(interaction = interaction)
+        user = await get_user(user_id=interaction.user.id)
     await user.shop(interaction=interaction, item=item)
-
-async def mini_game_goofyahh(interaction: discord.Interaction):
-    user = await get_user(user_id=interaction.user.id)
-    if not user:
-        await interaction.response.send_message('Вы не зарегистрированы, поэтому не можете использовать эту команду.')
-        return
-    message = ('HE HE HE HAW')
-    await interaction.response.send_message(message)
