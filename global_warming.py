@@ -5,7 +5,7 @@ from discord.ext import commands
 # file-imports------------------------------------------------------------------------------
 from buttons import bq1
 from embeds import eq1
-from mini_game import get_user
+from functional import register, get_user
 
 # functions---------------------------------------------------------------------------------
 async def global_warming_cmd(ctx: commands.Context) -> None:
@@ -50,6 +50,6 @@ async def global_warming_how_help(ctx: commands.Context) -> None:
 async def global_warming_quiz(interaction: discord.Interaction):
     user = await get_user(user_id=interaction.user.id)
     if not user:
-        await interaction.response.send_message('Вы не зарегистрированы, поэтому не можете использовать эту команду.')
-        return
-    await interaction.response.send_message(embed=eq1, view=bq1(user=user))
+        await register(interaction = interaction)
+        user = await get_user(user_id=interaction.user.id)
+    await interaction.response.send_message(embed=eq1, view=bq1(user=user), ephemeral=True)
