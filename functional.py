@@ -17,3 +17,11 @@ async def register(interaction: discord.Interaction) -> None:
     users_database.append(
         User(user_id=interaction.user.id, user_nickname=interaction.user.nick)
     )
+
+async def change(interaction: discord.Interaction, new_nick: str):
+    user = await get_user(user_id=interaction.user.id)
+    if not user:
+        await register(interaction = interaction)
+        user = await get_user(user_id=interaction.user.id)
+    user.nickname=new_nick
+    await interaction.response.send_message(f'ник изменён, новый ник:<{user.nickname}>')
