@@ -54,6 +54,7 @@ async def sleep(interaction: discord.Interaction) -> None:
 @bot.tree.command(name='shop', description='Напишите ? или help если не знаете ассортимент')
 async def shop(interaction: discord.Interaction, item: str) -> None:
     await mini_game_shop(interaction=interaction, item=item)
+    
 # global warming commands-------------------------------------------------------------------
 @bot.command('cmd_warming')
 async def cmd_warming(ctx: commands.Context) -> None:
