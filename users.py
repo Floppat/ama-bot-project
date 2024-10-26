@@ -89,18 +89,15 @@ class User:
 
     async def right_answer(self):
         self.right_answers+=1
-    async def quizresult(self, interaction: Interaction, cancel):
-        if not cancel:
-            if self.right_answers == 5:
-                job = ', хорошая работа!'
-            elif self.right_answers >= 0 and self.right_answers <= 2:
-                job = ', попробуйте почитать о глобальном потеплении ещё раз!'
-            elif self.right_answers >= 3 and self.right_answers <= 4:
-                job = ', неплохой результат, повторите теорию и попробуй ещё раз!'
-            if self.right_answers > self.history_max:
-                self.history_max = self.right_answers
-            await interaction.response.edit_message(content=f'Вы набрали {self.right_answers}/5 очков{job}\n'
-                                                            f'рекорд:{self.history_max}/5 очков.', embed=None, view=None)
-        elif cancel is True:
-            await interaction.response.edit_message(content='Отменено', embed=None, view=None)
+    async def quizresult(self, interaction: Interaction):
+        if self.right_answers == 5:
+            job = ', хорошая работа!'
+        elif self.right_answers >= 0 and self.right_answers <= 2:
+            job = ', попробуйте почитать о глобальном потеплении ещё раз!'
+        elif self.right_answers >= 3 and self.right_answers <= 4:
+            job = ', неплохой результат, повторите теорию и попробуйте ещё раз!'
+        if self.right_answers > self.history_max:
+            self.history_max = self.right_answers
+        await interaction.response.send_message(content=f'Вы набрали {self.right_answers}/5 очков{job}\n'
+                                                        f'рекорд:{self.history_max}/5 очков.')
         self.right_answers = 0
