@@ -12,7 +12,7 @@
 it's something like tamagochi, but you can improve your pet:
 * **stamina**
 * **defense**
-* **strenght**\n
+* **strenght** \n
 to defeat your opponents!
 ***
 ## general info
