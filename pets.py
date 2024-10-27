@@ -41,7 +41,7 @@ class Pet:
     
 
     def can_sleep(self) -> bool:
-        return self.stamina < 40
+        return self.stamina <= 40
     def sleep(self):
         self.stamina = self.max_stamina
     
