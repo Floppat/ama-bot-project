@@ -1,33 +1,37 @@
-# imports-----------------------------------------------------------------------------------
 import discord
 
-# basic commands----------------------------------------------------------------------------
+from functional import db
+
+
 bcmd = discord.Embed(
     title='Команды',
     description='все команды бота в одном месте!',
     color=discord.Colour.from_rgb(100, 200, 90))
 bcmd.add_field(
     name='Команды мини-игры',
-    value='''попробуйте '/register'
-             попробуйте '/prehistory'
-             попробуйте '/guide'
-             попробуйте '/train'
-             попробуйте '/feed'
-             попробуйте '/sleep'
-             попробуйте '/attack'
-             попробуйте '/shop'
-             попробуйте '!cmd_game'
+    value='''/change_nick
+             /change_pet_name
+             /leaderboard
+             /prehistory
+             /guide
+             /me
+             /stats
+             /train
+             /feed
+             /sleep
+             /attack
+             /shop
+             !cmd_game
              (подробнее о командах игры)''')
 bcmd.add_field(
     name='Команды глобального потепления',
-    value='''попробуйте '!about'
-             попробуйте '!reasons'
-             попробуйте '!how_help'
-             попробуйте '/quiz'
-             попробуйте '!cmd_warming'
+    value='''!about
+             !reasons
+             !how_help
+             /quiz
+             !cmd_warming
              (подробнее о командах о потеплении)''')
 
-# global warming embeds-------------------------------------------------------------------
 eq1 = discord.Embed(
     title='Первый вопрос',
     description='нажмите кнопку с правильным ответом',
@@ -77,3 +81,39 @@ eq5.add_field(
     value='''A: Вырубка лесов и промышленное производство
              B: машины
              C: из за перенаселения планета не справляется с количевством выдыхаемого людми углекислого газа''')
+
+def lb_embed(page, entity, parameter):
+    lb = discord.Embed(
+        title=f'Лидеры по {parameter}',
+        color=discord.Colour.from_rgb(100, 200, 90))
+    value=''
+    for key in page:
+        if entity == 'pets':
+            value += f'{key} **{db.read('users',db.get_PK('users','pet_id',page[key][0],int)[0],'nickname')[0]}**\n'
+        elif entity == 'users':
+            value += f'{key} **{page[key][0]}**\n'
+    lb.add_field(
+        name='место',
+        value=value)
+    value=''
+    if entity == 'pets':
+        name = 'pet name'
+    else:
+        name = parameter
+    for key in page:
+        if entity == 'pets':
+            value += f'{page[key][1]}\n'
+        elif entity == 'users':
+            value += f'{page[key][1]}\n'
+    lb.add_field(
+        name=name,
+        value=value)
+    if entity == 'pets': 
+        value=''
+        for key in page:
+            value += f'{page[key][2]}\n'
+
+        lb.add_field(
+            name=parameter,
+            value=value)
+    return lb
