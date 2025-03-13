@@ -1,27 +1,28 @@
-# imports-----------------------------------------------------------------------------------
 import discord
 
-# file-imports------------------------------------------------------------------------------
-from users import User
+from config import database
+from db import DB_Manager
 
-# functional--------------------------------------------------------------------------------
-users_database = list()
 
-async def get_user(user_id: int) -> User | None:
-    for user in users_database:
-        if user_id == user.user_id:
-            return user
-    return None
+db = DB_Manager(database)
+db.create_tables()
 
-async def register(interaction: discord.Interaction) -> None:
-    users_database.append(
-        User(user_id=interaction.user.id, user_nickname=interaction.user.nick)
-    )
 
-async def change(interaction: discord.Interaction, new_nick: str):
-    user = await get_user(user_id=interaction.user.id)
-    if not user:
-        await register(interaction = interaction)
-        user = await get_user(user_id=interaction.user.id)
-    user.nickname=new_nick
-    await interaction.response.send_message(f'ник изменён, новый ник:<{user.nickname}>')
+def plus_xp(interaction: discord.Interaction):
+    db.change('users',interaction.user.id,'xp',int,db.read('users',interaction.user.id,'xp')[0]+1)
+
+def change_status(interaction: discord.Interaction, status_id: int, user_tag: int):
+    if int(db.read('users',interaction.user.id,'status_id')[0]) == 2:
+        return db.change('users',db.get_PK('users','tag',user_tag,str)[0],'status_id',int,status_id)
+    else:
+        return 'недостаточно прав чтобы выполнить'
+    
+def delete_user(interaction: discord.Interaction, user_tag: int):
+    if int(db.read('users',interaction.user.id,'status_id')[0]) == 2:
+        return db.delete('users',db.get_PK('users','tag',user_tag,str)[0])
+    else:
+        return 'недостаточно прав чтобы выполнить'
+
+
+async def fetch_args(command: str, source: str) -> list[str]:
+    return source.removeprefix(command).strip().split()
