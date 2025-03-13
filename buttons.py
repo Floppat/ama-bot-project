@@ -1,10 +1,8 @@
-# imports----------------------------------------------------------------------------------
 import discord
 
-# file-imports-----------------------------------------------------------------------------
 from embeds import eq2,eq3,eq4,eq5
 
-# global warming buttons-------------------------------------------------------------------
+
 class bq1(discord.ui.View):
     def __init__(self, *, timeout = 180, user: int):
         super().__init__(timeout=timeout)
@@ -22,7 +20,7 @@ class bq1(discord.ui.View):
     @discord.ui.button(label='C', style=discord.ButtonStyle.secondary)
     async def bq13(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.edit_message(content="Неправильный ответ. правильный ответ был: B", embed=eq2, view=bq2(user=self.user))
-    
+
 
 
 class bq2(discord.ui.View):
